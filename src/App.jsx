@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Pallete from './pages/pallete';
+import Pallete from './pages/Pallete';
 import './App.css'; // Asegúrate de que tu CSS de Tailwind esté importado aquí
 import Home from './pages/Home';
 
