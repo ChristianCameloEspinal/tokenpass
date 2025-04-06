@@ -23,6 +23,18 @@ export const FrameHorizontal = styled.div.attrs({
   className:"frame-flex horizontal gap-m space-between"
 })``;
 
+export const FrameHorizontalPadd = styled.div.attrs({
+  className:"frame-flex horizontal gap-m padding m all space-between"
+})``;
+
+export const FrameVertical = styled.div.attrs({
+  className:"frame-flex vertical gap-s"
+})``;
+
+export const FrameVerticalMain = styled.div.attrs({
+  className:"frame-flex vertical gap-l"
+})``;
+
 export const TextSubtitle = styled.span.attrs({
   className: "text-subtitle"
 })``;
@@ -58,7 +70,7 @@ export const ButtonAlternate = styled.button.attrs({
   className: "button secondary"
 })``;
 
-export const TicketFrame = styled.div.attrs({
+export const EventFrame = styled.div.attrs({
   className: "frame-flex vertical border shadow"
 })``;
 
@@ -66,8 +78,8 @@ export const TextLink = styled.span.attrs({
   className: "text-link"
 })``;
 
-export const TicketPhoto = styled.img.attrs({
-  className: "ticket-photo"
+export const EventPhoto = styled.img.attrs({
+  className: "event-photo border border-simple shadow"
 })``;
 
 export const QuantityInput = styled.div.attrs({
@@ -77,4 +89,4 @@ export const QuantityInput = styled.div.attrs({
 export const Separator = styled.div`
   width: 100%;
   border: 1px solid var(--color-muted-light);
-  `
+  `;
