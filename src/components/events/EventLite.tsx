@@ -1,13 +1,18 @@
 import React from "react";
 import * as Styled from "../style/style";
 import { EventType } from "../../utils/types";
+import { useNavigate } from "react-router-dom";
 
 type EventFullProps = {
   data: EventType;
 };
 
 export default function EventLite({ data }: EventFullProps) {
+
+  const navigate = useNavigate();
+
   const {
+    id,
     eventName,
     eventDate,
     location,
@@ -17,8 +22,12 @@ export default function EventLite({ data }: EventFullProps) {
     eventDescription,
   } = data;
 
+  const handleClick = () => {
+    navigate(`/event/${id}`);
+  }
+
   return (
-    <Styled.EventFrame>
+    <Styled.EventFrame onClick={handleClick}>
       <Styled.FrameHorizontalPadd>
         <Styled.FrameVertical>
           <Styled.TextHint>{eventDate}</Styled.TextHint>

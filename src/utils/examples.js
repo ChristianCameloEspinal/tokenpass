@@ -95,7 +95,8 @@ export const events = [
         lastPrice: 30.0,
         currentPrice: 25.0,
         location: "Vienna, Austria",
-        image: "https://picsum.photos/300"
+        image: "https://picsum.photos/300",
+        eventDescription: "A night of electronic music with top DJs from around the world. Dance, enjoy, and celebrate the beats all night long."
     },
     {
         id: 10,
@@ -106,6 +107,6 @@ export const events = [
         currentPrice: 10.0,
         location: "Copenhagen, Denmark",
         image: "/images/placeholder.jpg",
-         eventDescription: "A night of electronic music with top DJs from around the world. Dance, enjoy, and celebrate the beats all night long."
+        eventDescription: "A night of electronic music with top DJs from around the world. Dance, enjoy, and celebrate the beats all night long."
     }
 ];

@@ -186,6 +186,29 @@ body {
   &.s {
     gap: var(--padding-small);
     &.all {
+      padding: 0.5rem;
+    }
+
+    &.top {
+      padding-top: var(--padding-small);
+    }
+
+    &.bottom {
+      padding-bottom: var(--padding-small);
+    }
+
+    &.left {
+      padding-left: var(--padding-small);
+    }
+
+    &.right {
+      padding-right: var(--padding-small);
+    }
+  }
+
+  &.xs {
+    gap: var(--padding-small);
+    &.all {
       padding: var(--padding-small);
     }
 
