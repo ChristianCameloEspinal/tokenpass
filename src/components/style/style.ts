@@ -7,9 +7,7 @@ export const Page = styled.div.attrs({
 
 export const Wrapper = styled.div.attrs({
   className: "wrapper padding xl all"
-})`
-    margin-bottom: 400px;  /* Esto es un estilo adicional */
-  `;
+})``;
 
 export const Title = styled.h1.attrs({
   className: "text-display"
@@ -30,6 +28,12 @@ export const FrameHorizontalPadd = styled.div.attrs({
 export const FrameVertical = styled.div.attrs({
   className:"frame-flex vertical gap-s"
 })``;
+
+export const FrameVerticalFixed = styled.div.attrs({
+  className:"frame-flex vertical gap-s"
+})`
+  position:sticky;
+`;
 
 export const FrameVerticalMain = styled.div.attrs({
   className:"frame-flex vertical gap-l"
@@ -66,6 +70,14 @@ export const Input = styled.div.attrs({
 export const Button = styled.button.attrs({
   className: "button primary"
 })``;
+
+export const ButtonSmall = styled.button.attrs({
+  className: "button primary"
+})`
+  width:fit-content;
+`;
+
+
 export const ButtonAlternate = styled.button.attrs({
   className: "button secondary"
 })``;

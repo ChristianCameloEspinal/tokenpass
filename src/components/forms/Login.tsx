@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
 import * as Styled from '../style/style'
-import { TextBody, InputField } from './../style/style';
+
 
 
 
@@ -27,8 +27,9 @@ const LoginForm =  ({ onSwitch }: { onSwitch: () => void }) => {
             phone: 653252628,
             token: '123',
         };
-        setUser(userData); // Guardamos el usuario en el contexto
 
+        localStorage.setItem('user',JSON.stringify(userData));
+        setUser(userData);
         // En este punto, el usuario está autenticado, y puedes redirigir o mostrar algo.
     };
 

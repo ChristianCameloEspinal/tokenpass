@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Tipo de datos de usuario
 type User = {
@@ -29,6 +29,7 @@ export const useUser = () => {
   return context;
 };
 
+
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -36,6 +37,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     localStorage.removeItem('user'); // Borrar el usuario en el almacenamiento local si es necesario
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, logout }}>

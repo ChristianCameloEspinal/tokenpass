@@ -14,7 +14,7 @@ export interface EventType {
 
 // Definimos un tipo para el usuario
 export interface UserType {
-    id: number;
+    id: string;
     name: string;
     email: string;
     phone: string;
@@ -30,9 +30,10 @@ export interface ApiResponse<T> {
 }
 
 // También puedes definir tipos de otros objetos que uses en tu aplicación
-export interface Ticket {
+export interface TicketType {
     id: number;
-    event: Event;
+    event: number;
     price: number;
     purchasedDate: string;
+    owner: string
 }

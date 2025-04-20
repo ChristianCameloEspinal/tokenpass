@@ -8,6 +8,7 @@ import { AppContextProvider } from './contexts/AppContextProvider.js'
 
 import './index.css'
 import App from './App.jsx'
+import Footer from './components/layout/Footer';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

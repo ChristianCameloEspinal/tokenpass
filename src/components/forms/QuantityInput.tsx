@@ -1,54 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 
-export default function QuantityInput() {
-  // Estado para el valor numérico
-  const [quantity, setQuantity] = useState(1);
+type Props = {
+  minQuantity: number;
+  maxQuantity: number;
+  quantity: number;
+  setQuantity: (value: number) => void;
+};
 
-  // Función para incrementar
+export default function QuantityInput({ minQuantity,maxQuantity,quantity, setQuantity }: Props) {
+
   const increment = () => {
-    setQuantity(quantity + 1);
+    if(quantity<maxQuantity)setQuantity(quantity + 1);
+  }
+  const decrement = () => {
+    if (quantity > 1 && quantity>minQuantity) setQuantity(quantity - 1);
   };
 
-  // Función para decrementar
-  const decrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
+  const decrementButtonClass = quantity <= minQuantity ? "quantity-button disabled" : "quantity-button";
+  const incrementButtonClass = quantity >= maxQuantity ? "quantity-button disabled" : "quantity-button";
 
   return (
     <div className="input-field border">
       <span className="frame-flex input padding s all">
-        {/* Botón para decrementar */}
         <button
           type="button"
-          className="decrement-button"
+          className={decrementButtonClass}
           onClick={decrement}
+          style={{ margin: "0 10px" }}
         >
           -
         </button>
 
-        {/* Campo de entrada para la cantidad */}
         <input
           type="number"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
           placeholder="1"
-          className=""
-          style={{textAlign:"right"}}
+          className="text-subtitle"
+          style={{ textAlign: "right" }}
         />
 
-        {/* Botón para incrementar */}
         <button
           type="button"
-          className="increment-button"
+          className={incrementButtonClass}
           onClick={increment}
+          style={{ margin: "0 10px" }}
         >
           +
         </button>
-
-        {/* Texto que indica que es la cantidad */}
-        <span className="input-type">Qty</span>
       </span>
     </div>
   );

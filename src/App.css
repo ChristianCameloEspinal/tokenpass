@@ -227,6 +227,9 @@ body {
   border-radius: var(--border-radius);
   border: 1px solid var(--color-muted-light);
   overflow: hidden;
+  &.active{
+    border: 1px solid var(--color-grey);
+  }
 }
 
 .frame-flex{
@@ -352,5 +355,16 @@ body {
   &:hover,:focus{
     background-color: var(--color-muted);
     color: var(--color-contrast-light);
+  }
+}
+
+.footer{
+  position: fixed;
+  bottom: 0;
+}
+
+.quantity-button{
+  &.disabled{
+    color: var(--color-muted);
   }
 }

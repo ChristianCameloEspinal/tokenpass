@@ -6,14 +6,21 @@ import * as Styled from '../components/style/style';
 
 import { EventType } from "../utils/types";
 import { events } from "../utils/examples";
+import { useEvent } from './../contexts/EventContext';
 
 export default function EventPage() {
+
+    const {event,setEvent} = useEvent();
     const { id } = useParams();
     const [eventData, setEventData] = useState<EventType | null>(null);
 
     useEffect(() => {
         const foundEvent = events.find((event) => event.id === Number(id));
-        setEventData(foundEvent || null); // Si no se encuentra el evento, `eventData` será `null`
+        
+        if (foundEvent) {
+            setEvent(foundEvent); // Seteás el evento completo al contexto
+            setEventData(foundEvent);
+        }
     }, [id]);
 
     if (!eventData) {
@@ -25,6 +32,11 @@ export default function EventPage() {
     return (
         <Styled.Page>
             <Styled.Wrapper>
+                <a href='/'>
+                <Styled.ButtonSmall>
+                    Back
+                </Styled.ButtonSmall>
+                </a>
                 <Styled.Title>{eventName}</Styled.Title>
                 <Styled.EventPhoto src="https://picsum.photos/300" alt="Foto del evento" />
                 <Styled.FrameVerticalMain>
