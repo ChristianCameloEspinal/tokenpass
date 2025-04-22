@@ -32,7 +32,8 @@ export const FrameVertical = styled.div.attrs({
 export const FrameVerticalFixed = styled.div.attrs({
   className:"frame-flex vertical gap-s"
 })`
-  position:sticky;
+  position:fixed;
+  bottom:0px
 `;
 
 export const FrameVerticalMain = styled.div.attrs({
@@ -83,6 +84,10 @@ export const ButtonAlternate = styled.button.attrs({
 })``;
 
 export const EventFrame = styled.div.attrs({
+  className: "frame-flex vertical border shadow"
+})``;
+
+export const TicketFrame = styled.div.attrs({
   className: "frame-flex vertical border shadow"
 })``;
 

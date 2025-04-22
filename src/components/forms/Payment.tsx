@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import * as Styled from "../style/style";
+import { useLocation } from "react-router-dom";
 
-const PaymentForm = ({ onConfirm }: { onConfirm: () => void }) => {
+/**
+ * Formulario de pago, recibe los datos del metodo de pago, por defecto tarjeta
+ * @param param0 Funcion Callback cuando se confirman los datos de pago
+ * @returns 
+ */
+const PaymentForm = ({ onConfirm }: { onConfirm: (data: any) => void }) => {
+
+    const { state } = useLocation();
     const [cardNumber, setCardNumber] = useState("");
     const [name, setName] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvv, setCvv] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
+        
         e.preventDefault();
 
-        // Aquí iría la lógica de procesamiento de pago o integración con un servicio externo.
         const paymentData = {
             cardNumber,
             name,
@@ -18,13 +26,16 @@ const PaymentForm = ({ onConfirm }: { onConfirm: () => void }) => {
             cvv,
         };
 
-        console.log("Sending payment info:", paymentData);
-        onConfirm(); // o redirigir o mostrar estado de éxito
+        console.log("FORM | PAYMENT","Sending payment info:", paymentData);
+        console.log("FORM | PAYMENT","Sending ticket info:", state);
+
+        onConfirm(paymentData);
     };
 
     return (
-        <Styled.FrameFloating>
-            <Styled.TextSubtitle>Enter your payment details</Styled.TextSubtitle>
+        <>
+        <Styled.TextSubtitle>Payment</Styled.TextSubtitle>
+            <Styled.TextHint>Enter your payment details</Styled.TextHint>
 
             <Styled.Form onSubmit={handleSubmit}>
                 <Styled.InputBox>
@@ -96,7 +107,7 @@ const PaymentForm = ({ onConfirm }: { onConfirm: () => void }) => {
 
                 <Styled.Button style={{ marginTop: "20px" }}>Confirm Payment</Styled.Button>
             </Styled.Form>
-        </Styled.FrameFloating>
+        </>
     );
 };
 

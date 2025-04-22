@@ -10,13 +10,13 @@ import { useEvent } from './../contexts/EventContext';
 
 export default function EventPage() {
 
-    const {event,setEvent} = useEvent();
+    const { event, setEvent } = useEvent();
     const { id } = useParams();
     const [eventData, setEventData] = useState<EventType | null>(null);
 
     useEffect(() => {
         const foundEvent = events.find((event) => event.id === Number(id));
-        
+
         if (foundEvent) {
             setEvent(foundEvent); // Seteás el evento completo al contexto
             setEventData(foundEvent);
@@ -27,15 +27,15 @@ export default function EventPage() {
         return <div>Loading or Event not found...</div>; // Aquí puedes reemplazarlo con un loader o algo más visual
     }
 
-    const { eventName, eventDate, location, type, lastPrice, currentPrice,eventDescription } = eventData;
+    const { eventName, eventDate, location, type, lastPrice, currentPrice, eventDescription } = eventData;
 
     return (
         <Styled.Page>
             <Styled.Wrapper>
                 <a href='/'>
-                <Styled.ButtonSmall>
-                    Back
-                </Styled.ButtonSmall>
+                    <Styled.ButtonSmall>
+                        Back
+                    </Styled.ButtonSmall>
                 </a>
                 <Styled.Title>{eventName}</Styled.Title>
                 <Styled.EventPhoto src="https://picsum.photos/300" alt="Foto del evento" />
@@ -53,9 +53,9 @@ export default function EventPage() {
                         </Styled.FrameVertical>
                     </Styled.FrameHorizontal>
                     <Styled.FrameVertical>
-                            <Styled.TextSubtitle>Details</Styled.TextSubtitle>
-                            <Styled.TextBody>{eventDescription}</Styled.TextBody>
-                        </Styled.FrameVertical>
+                        <Styled.TextSubtitle>Details</Styled.TextSubtitle>
+                        <Styled.TextBody>{eventDescription}</Styled.TextBody>
+                    </Styled.FrameVertical>
                 </Styled.FrameVerticalMain>
             </Styled.Wrapper>
         </Styled.Page>

@@ -5,6 +5,7 @@ body {
 }
 
 .App{
+  height: 100vh;
   background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
 }
 

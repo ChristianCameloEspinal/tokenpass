@@ -117,7 +117,8 @@ export const users = [
         email: "sysadmin@example.com",
         phone: "+5491133344455",
         dob: "1995-06-12",
-        token: "token-sysadmin-abc123"
+        token: "token-sysadmin-abc123",
+        password: "sysadmin123"
     },
     {
         id: "0xabc123456789",
@@ -125,7 +126,8 @@ export const users = [
         email: "sofia@example.com",
         phone: "+5491133344455",
         dob: "1995-06-12",
-        token: "token-sofia-abc123"
+        token: "token-sofia-abc123",
+        password: "sofia123"
     },
     {
         id: "0xdef456789012",
@@ -133,7 +135,8 @@ export const users = [
         email: "lucas@example.com",
         phone: "+5491144455566",
         dob: "1990-03-25",
-        token: "token-lucas-def456"
+        token: "token-lucas-def456",
+        password: "lucas123"
     },
     {
         id: "0xghi789123456",
@@ -141,7 +144,8 @@ export const users = [
         email: "valentina@example.com",
         phone: "+5491122233344",
         dob: "1998-11-07",
-        token: "token-valentina-ghi789"
+        token: "token-valentina-ghi789",
+        password: "valentina123"
     },
     {
         id: "0xjkl012345678",
@@ -149,7 +153,8 @@ export const users = [
         email: "mateo@example.com",
         phone: "+5491177788899",
         dob: "1992-01-19",
-        token: "token-mateo-jkl012"
+        token: "token-mateo-jkl012",
+        password: "mateo123"
     },
     {
         id: "0xmno345678901",
@@ -157,7 +162,8 @@ export const users = [
         email: "emma@example.com",
         phone: "+5491199911122",
         dob: "1997-09-30",
-        token: "token-emma-mno345"
+        token: "token-emma-mno345",
+        password: "emma123"
     }
 ];
 export const tickets = [
@@ -281,3 +287,4 @@ export const tickets = [
         owner: "0xa000sysadmin"
     },
 ];
+

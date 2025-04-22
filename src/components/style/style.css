@@ -420,7 +420,10 @@ body {
   }
   &.secondary{
     background-color: var(--color-contrast-light);
-
+  }
+  &.disabled{
+    background-color: var(--color-muted-light);
+    color: var(--color-contrast-light);
   }
 
   &:hover,:focus{

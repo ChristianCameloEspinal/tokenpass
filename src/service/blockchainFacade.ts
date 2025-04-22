@@ -12,13 +12,14 @@ export const BlockchainAPI = {
     let user = mockUsers.find(u => u.id.toString() === address);
     if (!user) {
       // Si el usuario no existe, lo creamos y lo agregamos
-      user = { 
-        id: "fake_wallet_id", 
-        name: `User_fake_name`, 
-        email: `fake_email@example.com`, 
-        phone: "123456789", 
-        dob: "1990-01-01", 
-        token: `token_fake` 
+      user = {
+        id: "fake_wallet_id",
+        password: "fake_password",
+        name: `User_fake_name`,
+        email: `fake_email@example.com`,
+        phone: "123456789",
+        dob: "1990-01-01",
+        token: `token_fake`
       };
       mockUsers.push(user);
     }
@@ -31,21 +32,21 @@ export const BlockchainAPI = {
   },
 
   // Simula la compra de un ticket
-//   purchaseTicket: async (eventId: number, buyerAddress: WalletAddress): Promise<TicketType> => {
-//     const event = mockEvents.find(event => event.id === eventId);
-//     if (!event) throw new Error("Event not found");
+  //   purchaseTicket: async (eventId: number, buyerAddress: WalletAddress): Promise<TicketType> => {
+  //     const event = mockEvents.find(event => event.id === eventId);
+  //     if (!event) throw new Error("Event not found");
 
-//     // Crear un nuevo ticket y agregarlo
-//     const newTicket: TicketType = {
-//       id: ticketIdCounter++,
-//       event: eventId,
-//       price: event.currentPrice,
-//       purchasedDate: new Date().toISOString(),
-//       owner: buyerAddress,
-//     };
-//     mockTickets.push(newTicket);
-//     return newTicket;
-//   },
+  //     // Crear un nuevo ticket y agregarlo
+  //     const newTicket: TicketType = {
+  //       id: ticketIdCounter++,
+  //       event: eventId,
+  //       price: event.currentPrice,
+  //       purchasedDate: new Date().toISOString(),
+  //       owner: buyerAddress,
+  //     };
+  //     mockTickets.push(newTicket);
+  //     return newTicket;
+  //   },
 
   // Obtiene los tickets de un usuario
   getMyTickets: async (walletAddress: WalletAddress): Promise<TicketType[]> => {
@@ -53,13 +54,10 @@ export const BlockchainAPI = {
   },
 
   // Simula la transferencia de un ticket
-  transferTicket: async (ticketId: number, toAddress: WalletAddress): Promise<boolean> => {
+  purchaseTicket: async (ticketId: number, toAddress: WalletAddress): Promise<boolean> => {
     const ticket = mockTickets.find(t => t.id === ticketId);
-    if (ticket && ticket.owner !== toAddress) {
-      ticket.owner = toAddress;
-      return true;
-    }
-    return false;
+    // modifyTicketOwner(ticketId, toAddress);
+    return true;
   },
 
   // Simula la firma de una transacción

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 
 import * as Styled from '../../components/style/style';
@@ -11,18 +11,21 @@ import PaymentForm from "../forms/Payment";
 
 export default function Footer() {
 
-    const location = useLocation();
-
+    const navigate = useNavigate();
     const isEventPage = location.pathname.startsWith("/event/");
+
+    const handleLocation = (location:string) =>{
+        navigate(location);
+    }
 
     return (
         <Styled.FrameVerticalFixed className="shadow" style={{ bottom: 0 }}>
             {isEventPage &&(<PurchaseForm></PurchaseForm>)}
             <Styled.FrameHorizontal className="shadow padding xl all">
-                <span className="material-symbols-outlined">
+                <span onClick={()=>handleLocation('/tickets')} className="material-symbols-outlined">
                     sell
                 </span>
-                <span className="material-symbols-outlined">
+                <span onClick={()=>handleLocation('/') }className="material-symbols-outlined">
                     shopping_cart
                 </span>
                 <span className="material-symbols-outlined">

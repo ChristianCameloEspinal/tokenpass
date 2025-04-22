@@ -24,12 +24,12 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
         // Aquí deberías llamar a tu API de autenticación
         // Simulamos un login exitoso:
         const userData = {
-            id: 1,
+            id: "1",
             name: "John Doe",
             email: email,
             password: "",
             dob: "",
-            phone: 653252628,
+            phone: "653252628",
             token: '123',
         };
 

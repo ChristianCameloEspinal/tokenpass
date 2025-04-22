@@ -9,6 +9,8 @@ import * as Styled from '../style/style'
 import { Button, FrameVertical, FrameHorizontal } from './../style/style';
 
 import { tickets, users } from "../../utils/examples";
+import { styled } from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 const PurchaseForm = () => {
 
@@ -36,6 +38,26 @@ const PurchaseForm = () => {
         showOptions(!options);
     }
 
+    const navigate = useNavigate();
+
+    const handleProceedToPayment = () => {
+
+        if (!seller || !event) return;
+
+        const price = sellOptions[seller][0].price * quantity;
+
+        const purchaseData = {
+            eventId: event.id,
+            ticketId: sellOptions[seller][0].id,
+            seller,
+            quantity,
+            total: price
+        };
+
+        navigate("/checkout", { state: purchaseData });
+    };
+
+
     console.log("PURCHASE FORM", "sellers", sellOptions)
 
     return (
@@ -58,7 +80,7 @@ const PurchaseForm = () => {
                         {/* <Styled.TextHint>Original seller</Styled.TextHint> */}
 
                         <Styled.FrameVertical>
-                        <Styled.TextHint>Resellers</Styled.TextHint>
+                            <Styled.TextHint>Resellers</Styled.TextHint>
                             {Object.keys(sellOptions).map((sellerId) => {
 
                                 const sellerName = `Seller ${sellerId}`;
@@ -85,25 +107,40 @@ const PurchaseForm = () => {
 
                         </Styled.FrameVertical>
 
-                        <Styled.FrameHorizontal>
-                            <Styled.FrameVertical>
-                                <Styled.TextHint>Quantity</Styled.TextHint>
-                                <QuantityInput minQuantity={1} maxQuantity={10} quantity={quantity} setQuantity={setQuantity}></QuantityInput>
-                            </Styled.FrameVertical>
-                            <Styled.FrameVertical style={{ textAlign: "right" }}>
-                                <Styled.TextHint></Styled.TextHint>
-                                <Styled.TextHint>Total price</Styled.TextHint>
-                                {event &&
-                                    (<Styled.TextSubtitle>
-                                        $ {event?.currentPrice * quantity}
-                                    </Styled.TextSubtitle>)}
-                            </Styled.FrameVertical>
-                        </Styled.FrameHorizontal>
+                        {/* Choose Quantity */}
+                        {seller && (<>
+                            <Styled.FrameHorizontal>
+                                <Styled.FrameVertical>
+                                    <Styled.TextHint>Quantity</Styled.TextHint>
+                                    <QuantityInput minQuantity={1} maxQuantity={10} quantity={quantity} setQuantity={setQuantity}></QuantityInput>
+                                </Styled.FrameVertical>
+                                <Styled.FrameVertical style={{ textAlign: "right" }}>
+                                    <Styled.TextHint></Styled.TextHint>
+                                    <Styled.TextHint>Total price</Styled.TextHint>
+                                    {event &&
+                                        (<Styled.TextSubtitle>
+                                            $ {event?.currentPrice * quantity}
+                                        </Styled.TextSubtitle>)}
+                                </Styled.FrameVertical>
+                            </Styled.FrameHorizontal>
+                        </>
+                        )}
+                        {!seller && (<>
+                            <Styled.FrameHorizontal>
+                                <Styled.FrameVertical>
+                                    <Styled.TextSubtitle style={{ textAlign: "center" }}>Choose a seller first to purchase</Styled.TextSubtitle>
+                                </Styled.FrameVertical>
+                            </Styled.FrameHorizontal>
+                        </>)}
 
-                        <Styled.Button className="padding all m" style={{ marginTop: '10px' }}>
-                            Procede to payment
+                        <Styled.Button
+                            className={`padding all m ${!seller ? 'disabled' : ''}`}
+                            style={{ marginTop: '10px' }}
+                            onClick={handleProceedToPayment}
+                        >
+                            Proceed to payment
                         </Styled.Button>
-                        
+
                     </Styled.FrameVertical>
                 )}
 

@@ -7,9 +7,12 @@ import HomePage from './pages/Home';
 import Pallete from './pages/Pallete';
 import EventPage from './pages/Event';
 import DashboardPage from './pages/Dashboard';
+import CheckoutPage from './pages/Checkout';
 
 import Footer from './components/layout/Footer';
 import { useUser } from './contexts/UserContext';
+import TicketsPage from './pages/Tickets';
+
 
 const AppContent = () => {
   const { user } = useUser();
@@ -24,6 +27,8 @@ const AppContent = () => {
 
       <main className="page-content">
         <Routes>
+          <Route path='/tickets' element={<TicketsPage/>}></Route>
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/event/:id" element={<EventPage />} />
           <Route path="/pallete" element={<Pallete />} />

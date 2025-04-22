@@ -1,16 +1,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { UserType } from '../utils/types';
 
 // Tipo de datos de usuario
-type User = {
-    id: number,
-    name: string,
-    email: string,
-    password: string,
-    dob: string,
-    phone: number,
-    token: string,
-};
+type User = UserType
 
 type UserContextType = {
   user: User | null;

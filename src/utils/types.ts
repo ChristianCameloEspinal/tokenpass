@@ -20,6 +20,7 @@ export interface UserType {
     phone: string;
     dob: string;
     token: string;
+    password: string; 
 }
 
 // Definimos un tipo para la respuesta de una API, por ejemplo:

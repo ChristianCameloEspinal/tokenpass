@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
+import { users } from "../../utils/examples";
+
 import * as Styled from '../style/style'
 
 
@@ -16,22 +18,22 @@ const LoginForm =  ({ onSwitch }: { onSwitch: () => void }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Aquí deberías llamar a tu API de autenticación
-        // Simulamos un login exitoso:
-        const userData = {
-            id: 1,
-            name: "John Doe",
-            email: email,
-            password: "",
-            dob: "",
-            phone: 653252628,
-            token: '123',
-        };
-
-        localStorage.setItem('user',JSON.stringify(userData));
-        setUser(userData);
-        // En este punto, el usuario está autenticado, y puedes redirigir o mostrar algo.
+        console.log("FORM | LOGIN", "Email:", email, "Password:", password);
+    
+        // Aqui deberías llamar al API de autenticación
+        const userData = users.find(
+            (user) => user.email === email && user.password === password
+        );
+    
+        if (userData) {
+            // Autenticación exitosa
+            setUser(userData);
+            localStorage.setItem("user", JSON.stringify(userData));
+        } else {
+            alert("Invalid credentials. Please try again.");
+        }
     };
+    
 
     return (
         <>
@@ -43,7 +45,7 @@ const LoginForm =  ({ onSwitch }: { onSwitch: () => void }) => {
                         <Styled.TextBody>Email</Styled.TextBody>
                         <Styled.InputField>
                             <Styled.Input>
-                                <input type="email" autoComplete="email" placeholder="johndoe@email.com" required></input>
+                                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" placeholder="johndoe@email.com" required></input>
                             </Styled.Input>
                         </Styled.InputField>
                     </Styled.InputBox>
@@ -51,7 +53,7 @@ const LoginForm =  ({ onSwitch }: { onSwitch: () => void }) => {
                         <Styled.TextBody>Password</Styled.TextBody>
                         <Styled.InputField>
                             <Styled.Input>
-                                <input autoComplete="new-password" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required></input>
+                                <input value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required></input>
                             </Styled.Input>
                         </Styled.InputField>
                     </Styled.InputBox>
