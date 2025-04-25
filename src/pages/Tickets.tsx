@@ -6,8 +6,12 @@ import { useUser } from "../contexts/UserContext";
 export default function TicketsPage() {
 
     const { user } = useUser();
-    const userTickets = tickets.filter((ticket) => ticket.owner == user?.id)
-    const userTicketsWithDetails = userTickets?.map((ticket) => {
+
+    const userTickets = tickets.filter((ticket) => ticket.owner === user?.id);
+    
+    console.log("PAGE | TICKETS", "tickets no details", userTickets);
+    
+    const userTicketsWithDetails = userTickets.map((ticket) => {
         const event = events.find((event) => event.id === ticket.event);
         return {
             ...ticket,
@@ -17,16 +21,14 @@ export default function TicketsPage() {
             type: event?.type,
         };
     });
+    
+
+
 
     return (
         <>
             <Styled.Page>
                 <Styled.Wrapper>
-                    <a href='/'>
-                        <Styled.ButtonSmall>
-                            Back
-                        </Styled.ButtonSmall>
-                    </a>
                     <Styled.Title>My Tickets</Styled.Title>
                     <Styled.FrameVertical style={{ gap: "10px" }}>
                         <Styled.TextSubtitle>Events for you</Styled.TextSubtitle>

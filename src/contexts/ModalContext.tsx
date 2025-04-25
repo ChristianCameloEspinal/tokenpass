@@ -2,6 +2,11 @@
 import React, { createContext, useContext, useState } from "react";
 import ModalRegular from "../components/modals/modal-regular/ModalRegular";
 
+/**
+ * 
+ * * Contexto para manejar el estado del modal en la aplicación.
+ */
+
 type ModalContextType = {
     content: ModalContent;
     openModal: (content:ModalContent, onConfirm: () => void, onCancel?: () => void) => void;

@@ -5,7 +5,6 @@ import { BlockchainAPI } from "../service/blockchainFacade";
 import { useUser } from "../contexts/UserContext";
 import { useModal } from "../contexts/ModalContext";
 
-
 import * as Styled from '../components/style/style';
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -54,7 +53,7 @@ export default function CheckoutPage() {
                 if (user) {
                     BlockchainAPI.purchaseTicket(ticketId, user.id).then((response) => {
                         console.log("PAGE | CHECKOUT","Payment complete "+ finalPurchaseData);
-                        navigate(`/`);
+                        navigate(`/tickets`);
                     })
                 }
                 else {

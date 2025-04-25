@@ -42,7 +42,6 @@ export default function HomePage() {
     else {
         return (<>
             <Styled.Page>
-                <button onClick={logout}>Salir</button>
                 <Styled.Wrapper>
                     <Styled.Title>Marketplace</Styled.Title>
                     <Styled.FrameVertical>

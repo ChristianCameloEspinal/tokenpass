@@ -20,7 +20,7 @@ export interface UserType {
     phone: string;
     dob: string;
     token: string;
-    password: string; 
+    password: string;
 }
 
 // Definimos un tipo para la respuesta de una API, por ejemplo:
@@ -38,3 +38,25 @@ export interface TicketType {
     purchasedDate: string;
     owner: string
 }
+
+export interface ModalPropsType {
+    content: {
+        title: string;
+        subtitle: string;
+        message: string;
+    };
+    resolve: () => void;
+    reject: () => void;
+};
+
+export interface ModalPropsCodeType {
+    expectedCode: string;   
+    content: {
+      title: string;
+      subtitle?: string; 
+      message?: string;
+    };
+    resolve: () => void;
+    reject: () => void;
+
+  }

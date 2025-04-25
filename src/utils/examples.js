@@ -169,7 +169,7 @@ export const users = [
 export const tickets = [
     {
         id: 1,
-        event: 0,
+        event: 1,
         price: 45.0,
         purchasedDate: "2025-05-15",
         owner: "0xa000sysadmin"

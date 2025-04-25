@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useUser } from './contexts/UserContext';
 
 import './App.css';
 
@@ -8,11 +9,10 @@ import Pallete from './pages/Pallete';
 import EventPage from './pages/Event';
 import DashboardPage from './pages/Dashboard';
 import CheckoutPage from './pages/Checkout';
-
-import Footer from './components/layout/Footer';
-import { useUser } from './contexts/UserContext';
 import TicketsPage from './pages/Tickets';
 
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 
 const AppContent = () => {
   const { user } = useUser();
@@ -23,7 +23,9 @@ const AppContent = () => {
 
   return (
     <div className="App">
-      <span style={{ position: 'fixed', top: 10, left: 10, opacity: 0.5 }}>WIP V0.0.060425</span>
+      <span style={{ position: 'fixed', bottom: 10, left: 10, opacity: 0.5 }}>WIP V0.0.060425</span>
+
+      <Header/>
 
       <main className="page-content">
         <Routes>

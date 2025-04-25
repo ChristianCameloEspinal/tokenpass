@@ -1,0 +1,30 @@
+.modal-container{
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    padding: var(--padding-large);
+    pointer-events: painted;
+    top: 0;
+}
+.modal{
+    position: relative;
+    animation: FadeIn 0.3s ease-in-out;
+}
+.frame-flex{
+    background-color: white;
+}
+.close-button{
+    position: absolute;
+    top: var(--padding-small);
+    right: var(--padding-medium);
+}
+@keyframes FadeIn {
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}

@@ -2,6 +2,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserType } from '../utils/types';
 
+/**
+ * * Contexto para manejar el estado del usuario en la aplicación.
+ */
+
 // Tipo de datos de usuario
 type User = UserType
 
@@ -27,8 +31,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const logout = () => {
+    console.log("USER | LOGOUT", user);
     setUser(null);
-    localStorage.removeItem('user'); // Borrar el usuario en el almacenamiento local si es necesario
+    localStorage.removeItem('user'); 
   };
 
   useEffect(() => {
