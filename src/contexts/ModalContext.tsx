@@ -1,6 +1,7 @@
 // ModalContext.tsx
 import React, { createContext, useContext, useState } from "react";
 import ModalRegular from "../components/modals/modal-regular/ModalRegular";
+import { ModalPropsType } from "../utils/types";
 
 /**
  * 
@@ -13,11 +14,7 @@ type ModalContextType = {
     closeModal: () => void;
 };
 
-type ModalContent = {
-    title: string;
-    subtitle:string;
-    message: string;
-};
+type ModalContent = ModalPropsType['content']
 
 const ModalContext = createContext<ModalContextType | null>(null);
 

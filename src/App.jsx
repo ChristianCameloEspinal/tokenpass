@@ -10,6 +10,8 @@ import EventPage from './pages/Event';
 import DashboardPage from './pages/Dashboard';
 import CheckoutPage from './pages/Checkout';
 import TicketsPage from './pages/Tickets';
+import ValidationPage from './pages/Validation';
+import SellPage from './pages/Sell';
 
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -29,6 +31,8 @@ const AppContent = () => {
 
       <main className="page-content">
         <Routes>
+          <Route path='/sell/:id' element={<SellPage/>}></Route>
+          <Route path='/validate/:eventParam' element={<ValidationPage/>}></Route>
           <Route path='/tickets' element={<TicketsPage/>}></Route>
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />

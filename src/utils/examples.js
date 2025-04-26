@@ -172,119 +172,135 @@ export const tickets = [
         event: 1,
         price: 45.0,
         purchasedDate: "2025-05-15",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 2,
         event: 1,
         price: 30.0,
         purchasedDate: "2025-04-20",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 3,
         event: 2,
         price: 50.0,
         purchasedDate: "2025-06-25",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 4,
         event: 3,
         price: 15.0,
         purchasedDate: "2025-04-22",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 5,
         event: 4,
         price: 20.0,
         purchasedDate: "2025-06-01",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: true
     },
     {
         id: 6,
         event: 5,
         price: 0.0,
         purchasedDate: "2025-05-10",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 7,
         event: 6,
         price: 60.0,
         purchasedDate: "2025-09-12",
-        owner: "0xmno345678901"
+        owner: "0xmno345678901",
+        listed: false
     },
     {
         id: 8,
         event: 7,
         price: 35.0,
         purchasedDate: "2025-08-03",
-        owner: "0xghi789123456"
+        owner: "0xghi789123456",
+        listed: false
     },
     {
         id: 9,
         event: 5,
         price: 25.0,
         purchasedDate: "2025-07-20",
-        owner: "0xabc123456789"
+        owner: "0xabc123456789",
+        listed: false
     },
     {
         id: 10,
         event: 1,
         price: 10.0,
         purchasedDate: "2025-06-25",
-        owner: "0xabc123456789"
+        owner: "0xabc123456789",
+        listed: false
     },
     {
         id: 11,
         event: 0,
         price: 45.0,
         purchasedDate: "2025-05-16",
-        owner: "0xghi789123456"
+        owner: "0xghi789123456",
+        listed: false
     },
     {
         id: 12,
         event: 1,
         price: 30.0,
         purchasedDate: "2025-05-22",
-        owner: "0xjkl012345678"
+        owner: "0xjkl012345678",
+        listed: false
     },
     {
         id: 13,
         event: 2,
         price: 50.0,
         purchasedDate: "2025-06-28",
-        owner: "0xghi789123456"
+        owner: "0xghi789123456",
+        listed: false
     },
     {
         id: 14,
         event: 3,
         price: 15.0,
         purchasedDate: "2025-04-25",
-        owner: "0xghi789123456"
+        owner: "0xghi789123456",
+        listed: true
     },
     {
         id: 15,
         event: 4,
         price: 20.0,
         purchasedDate: "2025-06-05",
-        owner: "0xabc123456789"
+        owner: "0xabc123456789",
+        listed: true
     },
     {
         id: 16,
         event: 1,
         price: 45.0,
         purchasedDate: "2025-05-15",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: false
     },
     {
         id: 17,
         event: 1,
         price: 45.0,
         purchasedDate: "2025-05-15",
-        owner: "0xa000sysadmin"
+        owner: "0xa000sysadmin",
+        listed: true
     },
 ];
-

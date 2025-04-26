@@ -6,11 +6,15 @@ export const Page = styled.div.attrs({
 })``;
 
 export const Wrapper = styled.div.attrs({
-  className: "wrapper padding xl all"
+  className: "wrapper padding l tops m sides"
 })``;
 
 export const Title = styled.h1.attrs({
   className: "text-display"
+})``;
+
+export const Overlay = styled.div.attrs({
+  className: "overlay"
 })``;
 
 export const FrameFloating = styled.div.attrs({
@@ -47,6 +51,12 @@ export const TextSubtitle = styled.span.attrs({
 export const TextHint = styled.span.attrs({
   className: "text-hint"
 })``;
+
+export const TextError = styled.span.attrs({
+  className: "text-hint"
+})`
+  color: var(--color-danger);
+`;
 
 export const TextBody = styled.span.attrs({
   className: "text-body"

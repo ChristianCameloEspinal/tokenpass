@@ -15,6 +15,8 @@ body {
   /* Naranja de acción */
   --color-muted: #888888;
 
+  --color-danger: #9c0000;
+
   --color-grey: #2C2C2C;
 
   --color-muted-light: #cccdcf;
@@ -45,6 +47,21 @@ body {
   --box-shadow-medium: 0px 0px 5px rgba(0, 0, 0, 0.2);
 
   font-family: "DM Sans", sans-serif;
+}
+
+.overlay{
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  padding: var(--padding-large);
+  pointer-events: painted;
+  top: 0;
 }
 
 .text-display {
@@ -385,6 +402,7 @@ body {
     display: flex;
     width: 100%;
     flex-direction: column;
+    margin-bottom: 200px;
   }
 }
 

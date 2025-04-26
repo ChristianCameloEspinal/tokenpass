@@ -20,7 +20,7 @@ export default function QuantityInput({ minQuantity,maxQuantity,quantity, setQua
   const incrementButtonClass = quantity >= maxQuantity ? "quantity-button disabled" : "quantity-button";
 
   return (
-    <div className="input-field border">
+    <div className="input-field border" style={{ flex: 1 }}>
       <span className="frame-flex input padding s all">
         <button
           type="button"
