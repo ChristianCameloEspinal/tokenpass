@@ -53,18 +53,18 @@ body {
 }
 
 .overlay{
-  background-color: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(5px);
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-  padding: var(--padding-large);
-  pointer-events: painted;
-  top: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    padding: var(--padding-large);
+    pointer-events: painted;
+    top: 0;
 }
 
 .text-display {
@@ -350,7 +350,6 @@ body {
     outline: none;
   }
 }
-
 
 .button{
   flex: 1;

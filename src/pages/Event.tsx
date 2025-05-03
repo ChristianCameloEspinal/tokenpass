@@ -18,7 +18,7 @@ export default function EventPage() {
         const foundEvent = events.find((event) => event.id === Number(id));
 
         if (foundEvent) {
-            setEvent(foundEvent); // Seteás el evento completo al contexto
+            setEvent(foundEvent);
             setEventData(foundEvent);
         }
     }, [id]);
