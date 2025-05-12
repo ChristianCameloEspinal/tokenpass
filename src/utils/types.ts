@@ -50,7 +50,6 @@ export interface ModalPropsType {
 };
 
 export interface ModalPropsCodeType {
-    expectedCode: string;   
     content: {
       title: string;
       subtitle?: string; 

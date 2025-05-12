@@ -2,11 +2,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserType } from '../utils/types';
 
-/**
- * * Contexto para manejar el estado del usuario en la aplicación.
- */
-
-// Tipo de datos de usuario
 type User = UserType
 
 type UserContextType = {
