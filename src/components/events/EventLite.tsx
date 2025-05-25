@@ -36,8 +36,8 @@ export default function EventLite({ data }: EventFullProps) {
         </Styled.FrameVertical>
         <Styled.FrameVertical style={{ textAlign: "right" }}>
           <Styled.TextHint>{type}</Styled.TextHint>
-          <Styled.TextHint>Last price ${lastPrice.toFixed(2)}</Styled.TextHint>
-          <Styled.TextSubtitle>${currentPrice.toFixed(2)}</Styled.TextSubtitle>
+          {/* <Styled.TextHint>Last price ${lastPrice.toFixed(2)}</Styled.TextHint>
+          <Styled.TextSubtitle>${currentPrice.toFixed(2)}</Styled.TextSubtitle> */}
         </Styled.FrameVertical>
       </Styled.FrameHorizontalPadd>
     </Styled.EventFrame>

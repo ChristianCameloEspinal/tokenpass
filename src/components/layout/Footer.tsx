@@ -4,35 +4,47 @@ import { useUser } from "../../contexts/UserContext";
 
 import * as Styled from '../../components/style/style';
 
-import QuantityInput from "../forms/QuantityInput";
 import PurchaseForm from "../forms/Purchase";
-import PaymentForm from "../forms/Payment";
 import SellForm from "../forms/Sell";
 
 export default function Footer() {
-
     const navigate = useNavigate();
+    const location = useLocation(); // 💡 Agregado para obtener la ruta actual
+    const [able, setAble] = useState(false);
+    const { user } = useUser();
+
     const isEventPage = location.pathname.startsWith("/event/");
     const isSellPage = location.pathname.startsWith("/sell/");
 
-    const handleLocation = (location:string) =>{
+    const handleLocation = (location: string) => {
         navigate(location);
-    }
+    };
+
+    useEffect(() => {
+        if (user) {
+            setAble(true);
+        } else {
+            setAble(false);
+        }
+    }, [user]);
+
+    if (!able) return null; 
 
     return (
         <Styled.FrameVerticalFixed className="shadow" style={{ bottom: 0 }}>
-            {isSellPage && (<SellForm></SellForm>)}
-            {isEventPage &&(<PurchaseForm></PurchaseForm>)}
-            <Styled.FrameHorizontal className="shadow padding xl all">
-                <span onClick={()=>handleLocation('/tickets')} className="material-symbols-outlined">
+            {isSellPage && <SellForm />}
+            {isEventPage && <PurchaseForm />}
+            <Styled.FrameHorizontal className="padding xl all">
+                <span onClick={() => handleLocation('/tickets')} className="material-symbols-outlined">
                     sell
                 </span>
-                <span onClick={()=>handleLocation('/') }className="material-symbols-outlined">
+                <span onClick={() => handleLocation('/')} className="material-symbols-outlined">
                     shopping_cart
                 </span>
-                <span className="material-symbols-outlined">
+                <span onClick={() => handleLocation('/profile')} className="material-symbols-outlined">
                     person
                 </span>
             </Styled.FrameHorizontal>
-        </Styled.FrameVerticalFixed>)
+        </Styled.FrameVerticalFixed>
+    );
 }

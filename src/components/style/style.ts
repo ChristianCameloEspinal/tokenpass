@@ -75,7 +75,7 @@ export const InputField = styled.div.attrs({
 })``;
 
 export const Input = styled.div.attrs({
-  className : "frame-flex input padding s all"
+  className : "frame-flex input padding m all"
 })``;
 
 export const Button = styled.button.attrs({

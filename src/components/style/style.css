@@ -5,7 +5,7 @@ body {
 }
 
 #root {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   --color-primary: #2563eb;
   /* Azul principal */
@@ -44,7 +44,7 @@ body {
 
   --border-radius: 0.5rem;
   --box-shadow-small: 0px 0px 8px rgba(0, 0, 0, 0.5);
-  --box-shadow-medium: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  --box-shadow-medium: 0px 0px 30px rgba(0, 0, 0, 0.2);
 
   font-family: "DM Sans", sans-serif;
 }
@@ -305,7 +305,7 @@ body {
 
 
 .shadow {
-  box-shadow: var(--box-shadow-medium)
+  box-shadow: var(--box-shadow-medium);
 }
 
 .modal-overlay {
@@ -399,10 +399,11 @@ body {
   width: 100%;
 
   & .wrapper {
-    display: flex;
+    display: inline-flex;
     width: 100%;
     flex-direction: column;
     margin-bottom: 200px;
+    box-sizing: border-box;
   }
 }
 
@@ -420,14 +421,27 @@ body {
 
   & input {
     width: inherit;
-    outline: none;
+    outline: none !important;
+    border: none;
+    font-family: inherit;
+  }
+
+  & textarea {
+    width: inherit;
+    outline: none !important;
+    border: none;
+    font-family: inherit;
+  }
+
+  & input[type="datetime-local"] {
+    font-family: inherit;
   }
 }
 
 
 .button{
   flex: 1;
-  padding: var(--padding-small) var(--padding-medium);
+  padding: var(--padding-medium) var(--padding-medium);
   border-radius: var(--border-radius);
   border: 1px solid var(--color-muted-light);
   transition: all 0.3s ease;

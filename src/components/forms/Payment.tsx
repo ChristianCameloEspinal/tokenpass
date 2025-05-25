@@ -26,9 +26,6 @@ const PaymentForm = ({ onConfirm }: { onConfirm: (data: any) => void }) => {
             cvv,
         };
 
-        console.log("FORM | PAYMENT","Sending payment info:", paymentData);
-        console.log("FORM | PAYMENT","Sending ticket info:", state);
-
         onConfirm(paymentData);
     };
 

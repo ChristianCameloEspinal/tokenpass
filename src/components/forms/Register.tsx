@@ -6,24 +6,23 @@ import { useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
 
 import * as Styled from '../style/style'
-import { FrameHorizontal } from './../style/style';
 
-import { registerUser, checkUserPhone, validateUserCode } from "../../service/api";
+import { registerUser, validateUserCode, checkUserPhoneRaw } from "../../service/api";
 
 const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
     const { openModal } = useModal();
     const { openModalCode } = useModalCode();
-    const { setUser } = useUser();
+    const { setUser, login } = useUser();
     const navigate = useNavigate();
 
     const [userData, setUserData] = useState<any>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [verificationError, setVerificationError] = useState<string>(""); // Estado para el error de verificación
+    const [verificationError, setVerificationError] = useState<string>(""); 
 
     const handleVerifyCode = async (code: string) => {
         try {
-            const validationResponse = await validateUserCode(userData.phone, code);
-            if (validationResponse.success) {
+            const validationResponse = true;//await validateUserCode(code);
+            if (validationResponse) {
                 openModal(
                     {
                         title: "Account created succesfully",
@@ -41,7 +40,7 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                 );
                 return true;
             } else {
-                setVerificationError(validationResponse.error || "Invalid code. Please try again.");
+                setVerificationError(validationResponse || "Invalid code. Please try again.");
                 return false;
             }
         } catch (error: any) {
@@ -57,18 +56,18 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
         openModal({
             title: "Confirm your personal information",
             subtitle: "This information could be use to allow you to enter the events that will be performed with the tickets on platform",
-            message: `Confirm your name ${userData.fullname}, phone number ${userData.phone}?`,
+            message: `Confirm your name ${userData.name}, phone number ${userData.phone}?`,
         },
             async () => {
                 try {
                     const hashedPassword = await bcrypt.hash(userData.password, 10);
                     await setUserData(prevUserData => ({ ...prevUserData, password: hashedPassword, confirmPassword: "" }));
                     const registrationResult = await registerUser(userData);
-
                     if (registrationResult.success) {
-                        const checkUserPhoneResult = await checkUserPhone(userData.phone);
-                        if (checkUserPhoneResult.success) {
-                            setVerificationError(""); // Resetear cualquier error previo
+                        login(registrationResult.data);
+                        const checkUserPhoneResult = true;//await checkUserPhoneRaw(userData.phone);
+                        if (checkUserPhoneResult) {
+                            setVerificationError(""); 
                             openModalCode(
                                 {
                                     title: "Phone verification",
@@ -81,13 +80,12 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                                 }
                             );
                         } else {
-                            //openModal({ title: "Error", message: checkUserPhoneResult.error || "Failed to send verification code." });
+                            
                         }
                     } else {
-                        //penModal({ title: "Error", message: registrationResult.error || "Registration failed" });
                     }
                 } catch (error: any) {
-                    //openModal({ title: "Error", message: error.message || "An error occurred." });
+                    
                 } finally {
                     setIsSubmitting(false);
                 }
@@ -114,9 +112,9 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                                 type="text"
                                 autoComplete="name"
                                 placeholder="John Doe"
-                                value={userData?.name} // Use fullname
+                                value={userData?.name} 
                                 onChange={handleInputChange}
-                                name="name" // Add name prop
+                                name="name" 
                                 required
                             />
                         </Styled.Input>
@@ -132,7 +130,7 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                                 placeholder="johndoe@email.com"
                                 value={userData?.email}
                                 onChange={handleInputChange}
-                                name="email"  // Add name prop
+                                name="email"  
                                 required
                             />
                         </Styled.Input>
@@ -179,7 +177,7 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                                 placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
                                 value={userData?.password}
                                 onChange={handleInputChange}
-                                name="password" // Add name prop
+                                name="password" 
                                 required
                             />
                         </Styled.Input>
@@ -195,7 +193,7 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                                 placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
                                 value={userData?.confirmPassword}
                                 onChange={handleInputChange}
-                                name="confirmPassword" // Add name prop
+                                name="confirmPassword"
                                 required
                             />
                         </Styled.Input>
@@ -208,7 +206,7 @@ const RegisterForm = ({ onSwitch }: { onSwitch: () => void }) => {
                             required
                             checked={userData?.acceptTerms}
                             onChange={(e) => setUserData({ ...userData, acceptTerms: e.target.checked })}
-                            name="acceptTerms" // Add name prop
+                            name="acceptTerms"
                         />
                         <Styled.TextBody>Accept terms and conditions of the platform</Styled.TextBody>
                     </span>

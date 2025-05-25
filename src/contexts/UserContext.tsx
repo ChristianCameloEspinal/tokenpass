@@ -8,6 +8,7 @@ type UserContextType = {
   user: User | null;
   setUser: (user: User) => void;
   logout: () => void;
+  login: (user: User) => void;
 };
 
 // Contexto
@@ -26,9 +27,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const logout = () => {
-    console.log("USER | LOGOUT", user);
+    //console.log("USER | LOGOUT", user);
     setUser(null);
-    localStorage.removeItem('user'); 
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   useEffect(() => {
@@ -38,8 +40,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  const login = (userData: User) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('token', userData.token);
+  };
+
+
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={{ user, setUser, logout, login }}>
       {children}
     </UserContext.Provider>
   );

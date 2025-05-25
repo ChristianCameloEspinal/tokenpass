@@ -1,37 +1,38 @@
 import React from "react";
-import { useState } from "react";
-import { useUser } from "../../contexts/UserContext";
-import { useEvent } from "../../contexts/EventContext";
-
-import QuantityInput from "./QuantityInput";
-
+import { useState, useEffect } from "react";
 import * as Styled from '../style/style'
-import { Button, FrameVertical, FrameHorizontal } from './../style/style';
+import { useNavigate, useParams } from "react-router-dom";
 
-import { tickets, users } from "../../utils/examples";
-import { styled } from 'styled-components';
-import { useNavigate } from "react-router-dom";
+import { getEventReselles } from "../../service/api";
+import { weiToUsd } from "../../utils/blockchainUtils";
 
 const PurchaseForm = () => {
 
-    const { event } = useEvent();
     const [quantity, setQuantity] = useState(1);
     const [options, showOptions] = useState(false);
-    const [seller, setSeller] = useState("");
+    const [seller, setSeller] = useState<any>(null);
+    const [resellers, setResellers] = useState({});
 
-    const ticketsRelated = tickets.filter((ticket) => ticket.event === event?.id)
-    console.log("PURCHASE FORM", "tickets", ticketsRelated)
+    const pathParts = location.pathname.split("/");
+    const eventId = pathParts[2];
 
-    const sellOptions = ticketsRelated.reduce((acc, ticket) => {
-        if (!acc[ticket.owner]) {
-            acc[ticket.owner] = [];
+    useEffect(() => {
+        const fetchEvent = async () => {
+            try {
+                const data = await getEventReselles(eventId);
+                const eventsArray = data.data;
+                setResellers(eventsArray);
+            } catch (error) {
+                console.error("Error fetching resellers:", error);
+            }
+        };
+        if (eventId) {
+            fetchEvent();
         }
-        acc[ticket.owner].push(ticket);
-        return acc;
-    }, {});
+    }, [eventId]);
 
-    const handleSelectSeller = (sellerId: string) => {
-        setSeller(sellerId);
+    const handleSelectSeller = (ticket: any) => {
+        setSeller(ticket);
     }
 
     const handleOptions = () => {
@@ -42,23 +43,16 @@ const PurchaseForm = () => {
 
     const handleProceedToPayment = () => {
 
-        if (!seller || !event) return;
-
-        const price = sellOptions[seller][0].price * quantity;
+        if (!seller) return;
 
         const purchaseData = {
-            eventId: event.id,
-            ticketId: sellOptions[seller][0].id,
-            seller,
-            quantity,
-            total: price
+            ticketId: seller?.tokenId,
+            seller: seller?.to,
+            total: seller?.price
         };
 
         navigate("/checkout", { state: purchaseData });
     };
-
-
-    console.log("PURCHASE FORM", "sellers", sellOptions)
 
     return (
         <Styled.FrameHorizontal className="padding xl sides">
@@ -67,78 +61,62 @@ const PurchaseForm = () => {
                 <Styled.FrameHorizontal>
                     <Styled.FrameVertical style={{ flex: 2 }}>
                         <Styled.TextHint>Purchase the ticket</Styled.TextHint>
-                        <Styled.TextSubtitle>{event?.eventName}</Styled.TextSubtitle>
                     </Styled.FrameVertical>
                     <Styled.FrameVertical style={{ flex: 1 }}>
                         <Styled.Button onClick={() => handleOptions()}>{!options ? 'Purchase' : 'Hide'}</Styled.Button>
                     </Styled.FrameVertical>
                 </Styled.FrameHorizontal>
 
-                {options && (
+                {resellers && options && (
                     <Styled.FrameVertical className="gap-m">
 
-                        {/* <Styled.TextHint>Original seller</Styled.TextHint> */}
-
                         <Styled.FrameVertical>
-                            <Styled.TextHint>Resellers</Styled.TextHint>
-                            {Object.keys(sellOptions).map((sellerId) => {
+                            <Styled.FrameHorizontal>
+                                <Styled.TextHint>Resellers</Styled.TextHint>
+                                <Styled.TextHint>Price</Styled.TextHint>
+                            </Styled.FrameHorizontal>
+                            {Object.keys(resellers).map((tokenId) => {
 
-                                const sellerName = `Seller ${sellerId}`;
-                                const sellerQuantity = sellOptions[sellerId].length;
-                                const sellerPrice = sellOptions[sellerId][0].price;
-                                const sellerClass = seller === sellerId ? 'border padding all m' : 'border padding all m'
-                                const sellerStyle = seller === sellerId ? 'var(--color-grey)' : 'inherit'
-                                const sellerColor = seller === sellerId ? 'white' : 'inherit'
+                                const reseller = resellers[tokenId];
+                                const sellerPrice = reseller.price;
+
+                                let sellerClass = 'border padding all m';
+                                let sellerStyle = 'inherit';
+                                let sellerColor = 'inherit';
+
+                                if (seller && seller.tokenId === reseller.tokenId) {
+                                    sellerStyle = 'var(--color-grey)';
+                                    sellerColor = 'white';
+                                }
 
                                 return (
-                                    <Styled.FrameVertical onClick={() => handleSelectSeller(sellerId)} className={sellerClass} key={sellerId} style={{ backgroundColor: sellerStyle, color: sellerColor }}>
+                                    <Styled.FrameVertical
+                                        onClick={() => handleSelectSeller(reseller)}
+                                        className={sellerClass}
+                                        key={tokenId}
+                                        style={{ backgroundColor: sellerStyle, color: sellerColor }}
+                                    >
                                         <Styled.FrameHorizontal style={{ backgroundColor: 'transparent' }}>
                                             <Styled.FrameVertical style={{ backgroundColor: 'transparent' }}>
-                                                <Styled.TextBody>{sellerName}</Styled.TextBody>
-                                                <Styled.TextHint>{sellerQuantity} Available</Styled.TextHint>
+                                                <Styled.TextBody>Ticket ID {reseller.tokenId}</Styled.TextBody>
                                             </Styled.FrameVertical>
                                             <Styled.TextSubtitle style={{ minWidth: 'fit-content' }}>
-                                                $ {sellerPrice}
+                                                {weiToUsd(sellerPrice).toFixed(2)} USD
                                             </Styled.TextSubtitle>
                                         </Styled.FrameHorizontal>
                                     </Styled.FrameVertical>
                                 );
                             })}
 
-                        </Styled.FrameVertical>
 
-                        {/* Choose Quantity */}
-                        {seller && (<>
-                            <Styled.FrameHorizontal>
-                                <Styled.FrameVertical>
-                                    <Styled.TextHint>Quantity</Styled.TextHint>
-                                    <QuantityInput minQuantity={1} maxQuantity={10} quantity={quantity} setQuantity={setQuantity}></QuantityInput>
-                                </Styled.FrameVertical>
-                                <Styled.FrameVertical style={{ textAlign: "right" }}>
-                                    <Styled.TextHint></Styled.TextHint>
-                                    <Styled.TextHint>Total price</Styled.TextHint>
-                                    {event &&
-                                        (<Styled.TextSubtitle>
-                                            $ {event?.currentPrice * quantity}
-                                        </Styled.TextSubtitle>)}
-                                </Styled.FrameVertical>
-                            </Styled.FrameHorizontal>
-                        </>
-                        )}
-                        {!seller && (<>
-                            <Styled.FrameHorizontal>
-                                <Styled.FrameVertical>
-                                    <Styled.TextSubtitle style={{ textAlign: "center" }}>Choose a seller first to purchase</Styled.TextSubtitle>
-                                </Styled.FrameVertical>
-                            </Styled.FrameHorizontal>
-                        </>)}
+                        </Styled.FrameVertical>
 
                         <Styled.Button
                             className={`padding all m ${!seller ? 'disabled' : ''}`}
                             style={{ marginTop: '10px' }}
                             onClick={handleProceedToPayment}
                         >
-                            Proceed to payment
+                            {!seller ? "Select an option to purchase" : "Procede to payment"}
                         </Styled.Button>
 
                     </Styled.FrameVertical>

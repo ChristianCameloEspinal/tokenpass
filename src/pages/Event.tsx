@@ -5,26 +5,58 @@ import { useUser } from "../contexts/UserContext";
 import * as Styled from '../components/style/style';
 
 import { EventType } from "../utils/types";
-import { events } from "../utils/examples";
-import { useEvent } from './../contexts/EventContext';
+import { getEventById } from "../service/api";
 
 export default function EventPage() {
 
-    const { event, setEvent } = useEvent();
     const { id } = useParams();
     const [eventData, setEventData] = useState<EventType | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const foundEvent = events.find((event) => event.id === Number(id));
-
-        if (foundEvent) {
-            setEvent(foundEvent);
-            setEventData(foundEvent);
+        if (id) {
+            const fetchEvent = async () => {
+                try {
+                    const response = await getEventById(id);
+                    //console.log(response)
+                    if (response.success) {
+                        setEventData(response.data.event); // Asegúrate de actualizar eventData con los datos correctos
+                    } else {
+                        console.error('Error fetching event:', response.error);
+                    }
+                } catch (error) {
+                    console.error("Error fetching events", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchEvent();
         }
     }, [id]);
 
+    if (loading) {
+        return (
+            <Styled.Page>
+                <Styled.Wrapper>
+                    <a href='/'>
+                        <Styled.ButtonSmall>
+                            Back
+                        </Styled.ButtonSmall>
+                    </a>
+                    <Styled.Title>Loading event...</Styled.Title>
+                </Styled.Wrapper>
+            </Styled.Page>
+        );
+    }
+
     if (!eventData) {
-        return <div>Loading or Event not found...</div>; // Aquí puedes reemplazarlo con un loader o algo más visual
+        return (
+            <Styled.Page>
+                <Styled.Wrapper>
+                    <Styled.Title>Event not found</Styled.Title>
+                </Styled.Wrapper>
+            </Styled.Page>
+        );
     }
 
     const { eventName, eventDate, location, type, lastPrice, currentPrice, eventDescription } = eventData;
@@ -48,8 +80,6 @@ export default function EventPage() {
                         </Styled.FrameVertical>
                         <Styled.FrameVertical style={{ textAlign: "right" }}>
                             <Styled.TextHint>{type}</Styled.TextHint>
-                            <Styled.TextHint>Last price ${lastPrice.toFixed(2)}</Styled.TextHint>
-                            <Styled.TextSubtitle>${currentPrice.toFixed(2)}</Styled.TextSubtitle>
                         </Styled.FrameVertical>
                     </Styled.FrameHorizontal>
                     <Styled.FrameVertical>

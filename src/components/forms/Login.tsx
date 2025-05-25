@@ -1,45 +1,45 @@
 import React from "react";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-
-import { users } from "../../utils/examples";
-
 import * as Styled from '../style/style'
+import { loginUser } from "../../service/api";
+import { useNavigate } from "react-router-dom";
 
+const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
 
-
-
-const LoginForm =  ({ onSwitch }: { onSwitch: () => void }) => {
-
-    const { setUser } = useUser();
+    const { login } = useUser();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        console.log("FORM | LOGIN", "Email:", email, "Password:", password);
-    
-        // Aqui deberías llamar al API de autenticación
-        const userData = users.find(
-            (user) => user.email === email && user.password === password
-        );
-    
-        if (userData) {
-            // Autenticación exitosa
-            setUser(userData);
-            localStorage.setItem("user", JSON.stringify(userData));
-        } else {
-            alert("Invalid credentials. Please try again.");
+        try {
+            const credentials = { email, password };
+            const loginResult = await loginUser(credentials);
+            console.log(loginResult)
+            if (loginResult.success) {
+                setError("")
+                login(loginResult.data)
+                navigate("/");
+            }
+            else {
+                setError("Wrong email | password credentials, try again.")
+            }
         }
+        catch (error) {
+            setError("Unknown error, please contact support.")
+        }
+
     };
-    
+
 
     return (
         <>
             <Styled.FrameFloating>
                 <Styled.TextSubtitle>Confirm your identity</Styled.TextSubtitle>
-
+                <Styled.TextHint>{error}</Styled.TextHint>
                 <Styled.Form onSubmit={handleSubmit}>
                     <Styled.InputBox>
                         <Styled.TextBody>Email</Styled.TextBody>

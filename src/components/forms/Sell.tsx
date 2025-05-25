@@ -1,55 +1,132 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserContext";
-import { useEvent } from "../../contexts/EventContext";
-
 import * as Styled from "../style/style";
-import QuantityInput from "./QuantityInput";
-
-import { tickets } from "../../utils/examples";
-import { TextSubtitle } from './../style/style';
+import { estimateGas, getTickets, listTicket } from "../../service/api";
+import { weiToUsd } from "../../utils/blockchainUtils";
+import { usdToWei } from './../../utils/blockchainUtils';
+import { ethers } from "ethers";
+import { useModal } from "../../contexts/ModalContext";
+import { useModalCode } from "../../contexts/ModalCodeContext";
 
 const SellForm = () => {
 
+    const { openModal } = useModal()
+    const { openModalCode } = useModalCode();
     const { user } = useUser();
-    const { event } = useEvent();
-
     const navigate = useNavigate();
 
-    const [pricePerTicket, setPricePerTicket] = useState<number>(event?.currentPrice || 0);
+    const [pricePerTicket, setPricePerTicket] = useState((0));
     const [quantity, setQuantity] = useState<number>(1);
     const [options, setOptions] = useState(false);
+    const [userTickets, setUserTickets] = useState<any[]>([]);
+    const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
+    const [fee, setFee] = useState<bigint>()
+
+    const pathParts = location.pathname.split("/");
+    const eventId = pathParts[2];
+
+    useEffect(() => {
+        const fetchTickets = async () => {
+            try {
+                const response = await getTickets();
+                const tickets = response.data.tickets;
+                const userTicketsWithDetails = tickets.filter(
+                    (ticket: any) => ticket.event === eventId
+                );
+                setUserTickets(userTicketsWithDetails);
+            } catch (error) {
+                console.error("Error fetching tickets", error);
+            }
+        };
+        if (eventId) fetchTickets();
+    }, [eventId]);
 
     const handleToggleOptions = () => {
         setOptions(!options);
     };
 
-    const maxSell = tickets.filter(ticket => ticket.owner === user?.id).length || 0;
+    const handlePriceValue = (price: number) => {
+        
+        setPricePerTicket(price);
+
+        const fetchGas = async () => {
+            try {
+                const resp = await estimateGas(
+                    "setTicketForSale",
+                    [selectedTicket.tokenId, usdToWei(price).toString()],
+                    usdToWei(price).toString()
+                );
+                const gasPriceGwei = resp.data.gasPrice.split(' ')[0];
+                const feeBigInt = ethers.parseUnits(gasPriceGwei, 9);
+                setFee(feeBigInt);
+            } catch (err) {
+                console.error("Error estimating gas", err);
+            }
+        };
+
+        fetchGas();
+    };
+
+
+    const handleSelectTicket = (ticket: any) => {
+        setSelectedTicket(ticket);
+        console.log(ticket)
+    };
+
+    const handleVerifyCode = async (code: string) => {
+        try {
+            if (user) {
+                const response = await listTicket(selectedTicket.tokenId, pricePerTicket, code);
+                navigate(`/tickets`);
+            }
+            return true;
+        } catch (error: any) {
+            console.log("Unable to verify code", error);
+            return false;
+        }
+    };
 
     const handleSubmitSale = () => {
-        if (!event || !user) return;
 
-        if (pricePerTicket <= 0 || quantity <= 0) {
+        if (!selectedTicket || !pricePerTicket) return;
+
+        if (pricePerTicket && pricePerTicket <= 0) {
             alert("Please set a valid price and quantity.");
             return;
         }
-
-        const sellData = {
-            eventId: event.id,
-            sellerId: user.id,
-            pricePerTicket,
-            quantity,
-            totalPrice: pricePerTicket * quantity,
-            timestamp: Date.now(),
-        };
-
-        console.log("SELL FORM", "Submitting sale:", sellData);
-
-        // Aquí luego iría la petición al backend...
-
-        navigate('/tickets');
+        openModal(
+            {
+                title: "Proceed to list your ticket",
+                subtitle: "Do you want to proceed?",
+                message: `We will charge you a fee of ${fee && weiToUsd(fee).toFixed(8)} USD`,
+            },
+            () => {
+                const doVerification = async () => {
+                    const checkUserPhoneResult = true; // await checkUserPhone();
+                    if (checkUserPhoneResult) {
+                        openModalCode(
+                            {
+                                title: "Phone verification",
+                                subtitle: "Enter the code sent to your number",
+                                message: "We’ve sent you a code, please type it below",
+                            },
+                            handleVerifyCode,
+                            () => {
+                                console.log("Verification cancelled.");
+                            }
+                        );
+                    }
+                };
+                doVerification();
+            },
+            () => {
+                console.log("PAGE | CHECKOUT", "Payment cancelled.");
+            }
+        );
     };
+
 
     return (
         <Styled.FrameHorizontal className="padding xl sides">
@@ -58,9 +135,9 @@ const SellForm = () => {
                 <Styled.FrameHorizontal>
                     <Styled.FrameVertical style={{ flex: 2 }}>
                         <Styled.TextHint>Sell your ticket for</Styled.TextHint>
-                        <Styled.TextSubtitle>{event?.eventName}</Styled.TextSubtitle>
-                        <Styled.TextHint>You have {maxSell} to sell</Styled.TextHint>
+                        <Styled.TextHint>You have {userTickets.length} to sell</Styled.TextHint>
                     </Styled.FrameVertical>
+
                     <Styled.FrameVertical style={{ flex: 1 }}>
                         <Styled.Button onClick={handleToggleOptions}>
                             {!options ? "Sell Ticket" : "Hide"}
@@ -68,70 +145,80 @@ const SellForm = () => {
                     </Styled.FrameVertical>
                 </Styled.FrameHorizontal>
 
-                {options && (
+                {options && userTickets.map((ticket: any) => {
+
+                    const isSelected = selectedTicket?.tokenId === ticket.tokenId;
+
+                    return (
+
+                        <Styled.TicketFrame
+                            onClick={() => handleSelectTicket(ticket)}
+                            className="border padding all s"
+                            key={ticket.tokenId}
+                            style={{
+                                backgroundColor: isSelected ? "var(--color-grey)" : "inherit",
+                                color: isSelected ? "white" : "inherit",
+                            }}>
+                            <Styled.FrameHorizontalPadd
+                                style={{
+                                    backgroundColor: isSelected ? "var(--color-grey)" : "inherit",
+                                    color: isSelected ? "white" : "inherit",
+                                }}
+                            >
+                                Ticket ID {ticket.tokenId}
+                            </Styled.FrameHorizontalPadd>
+                        </Styled.TicketFrame>
+                    );
+                })}
+
+
+                {options && selectedTicket && (
                     <Styled.FrameVertical className="gap-m padding xl top">
-
                         <Styled.TextSubtitle>Resume</Styled.TextSubtitle>
-                        {/* Precio por ticket */}
-                        <Styled.FrameHorizontal className="gap-s">
 
-                            <Styled.TextHint style={{ flex: 1 }}>Price per Ticket ($)</Styled.TextHint>
+
+                        <Styled.FrameHorizontal className="gap-s">
+                            <Styled.TextHint style={{ flex: 1 }}>Price per Ticket (USD)</Styled.TextHint>
                             <div className="input-field border" style={{ flex: 1 }}>
                                 <span className="frame-flex input padding s all">
                                     <input
                                         type="number"
-                                        value={pricePerTicket}
-                                        onChange={(e) => setPricePerTicket(Number(e.target.value))}
+                                        value={pricePerTicket.toFixed(2)}
+                                        onChange={(e) => handlePriceValue(Number(e.target.value))}
                                         placeholder="1"
                                         className="text-subtitle"
+                                        step={1}
                                         style={{ textAlign: "right" }}
                                     />
-                                    <span
-                                        style={{ margin: "0 10px" }}
-                                    >
-                                        $
-                                    </span>
+                                    <span style={{ margin: "0 10px", alignSelf: "anchor-center" }}>$</span>
                                 </span>
                             </div>
                         </Styled.FrameHorizontal>
 
-                        {/* Cantidad de tickets */}
-                        <Styled.FrameHorizontal className="gap-s">
-                            <Styled.TextHint style={{ flex: 1 }}>Quantity</Styled.TextHint>
-                            <QuantityInput
-                                minQuantity={1}
-                                maxQuantity={maxSell}
-                                quantity={quantity}
-                                setQuantity={setQuantity}
-                            />
-                        </Styled.FrameHorizontal>
-
-                        {/* Total */}
                         <Styled.FrameVertical style={{ justifyContent: "space-between" }}>
                             <Styled.FrameHorizontal>
-                                <Styled.TextBody>Total to receive:</Styled.TextBody>
-                                <Styled.TextHint>(After sell)</Styled.TextHint>
+                                <Styled.TextBody>Transaction fee</Styled.TextBody>
+                                <Styled.TextBody>{fee && weiToUsd(fee).toFixed(10)} USD</Styled.TextBody>
                             </Styled.FrameHorizontal>
                             <Styled.Separator></Styled.Separator>
-                            <Styled.TextSubtitle>
-                                $ {pricePerTicket * quantity}
-                            </Styled.TextSubtitle>
+                            <Styled.FrameHorizontal style={{ marginTop: 50 }}>
+                                <Styled.TextBody>Total sell price:</Styled.TextBody>
+                                <Styled.TextSubtitle>{fee && pricePerTicket && (weiToUsd(fee) + pricePerTicket).toFixed(2)} USD</Styled.TextSubtitle>
+                            </Styled.FrameHorizontal>
                         </Styled.FrameVertical>
 
                         {/* Botón Confirmar */}
                         <Styled.Button
-                            className={`padding all m ${(pricePerTicket <= 0 || quantity <= 0) ? 'disabled' : ''}`}
+                            className={`padding all m ${(pricePerTicket && pricePerTicket <= 0 || quantity <= 0) ? 'disabled' : ''}`}
                             style={{ marginTop: '10px' }}
                             onClick={handleSubmitSale}
                         >
                             Confirm and List Ticket
                         </Styled.Button>
-
                     </Styled.FrameVertical>
                 )}
-
             </Styled.FrameVertical>
-        </Styled.FrameHorizontal>
+        </Styled.FrameHorizontal >
     );
 };
 

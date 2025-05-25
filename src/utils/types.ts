@@ -1,5 +1,4 @@
 
-// Definimos un tipo para el evento
 export interface EventType {
     id: number;
     eventName: string;
@@ -10,10 +9,11 @@ export interface EventType {
     lastPrice: number;
     currentPrice: number;
     eventDescription: string;
+    organizerId: string;
 }
 
-// Definimos un tipo para el usuario
 export interface UserType {
+    user: UserType
     id: string;
     name: string;
     email: string;
@@ -21,22 +21,28 @@ export interface UserType {
     dob: string;
     token: string;
     password: string;
+    distributor: boolean;
+    wallet: string;
 }
 
-// Definimos un tipo para la respuesta de una API, por ejemplo:
 export interface ApiResponse<T> {
     data: T;
     message: string;
     status: string;
 }
 
-// También puedes definir tipos de otros objetos que uses en tu aplicación
 export interface TicketType {
-    id: number;
-    event: number;
-    price: number;
-    purchasedDate: string;
-    owner: string
+    tokenId: any;
+    forSale: any;
+    eventInfo:  string;
+    event(id: number, event: any): void;
+    id: number
+    eventName: string,
+    eventDate: string,
+    location: string,
+    type: string,
+    image: string,
+    eventDescription:string
 }
 
 export interface ModalPropsType {
@@ -51,11 +57,11 @@ export interface ModalPropsType {
 
 export interface ModalPropsCodeType {
     content: {
-      title: string;
-      subtitle?: string; 
-      message?: string;
+        title: string;
+        subtitle?: string;
+        message?: string;
     };
     resolve: () => void;
     reject: () => void;
 
-  }
+}

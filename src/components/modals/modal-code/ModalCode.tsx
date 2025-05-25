@@ -6,12 +6,11 @@ import { FrameFloating } from './../../style/style';
 
 type ModalPropsType = Omit<ModalPropsCodeType, 'expectedCode'> & {
     onCodeChange: (code: string) => void;
-    resolve: () => Promise<void> | void; // Resolve ahora puede ser async
+    resolve: () => Promise<void> | void;
 };
 
 export default function ModalCode({ content, resolve, reject, onCodeChange }: ModalPropsType) {
     const [code, setCode] = useState("");
-    // Puedes recibir el error como una prop si lo prefieres, o manejarlo en el componente padre
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCode(e.target.value);
@@ -19,7 +18,7 @@ export default function ModalCode({ content, resolve, reject, onCodeChange }: Mo
     };
 
     const handleSubmit = () => {
-        resolve(); // Llama a la función resolve del contexto
+        resolve(); 
     };
 
     return (<>

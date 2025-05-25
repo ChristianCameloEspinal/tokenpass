@@ -5,8 +5,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
     z-index: 100;
     padding: var(--padding-large);
     pointer-events: painted;

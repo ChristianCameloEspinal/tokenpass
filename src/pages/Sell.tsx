@@ -7,9 +7,9 @@ import { useUser } from "../contexts/UserContext";
 import * as Styled from '../components/style/style';
 
 import { EventType } from "../utils/types";
-import { events } from "../utils/examples";
 import { useEvent } from './../contexts/EventContext';
 import QuantityInput from "../components/forms/QuantityInput";
+import { getEventById, getSales } from "../service/api";
 
 export default function SellPage() {
 
@@ -17,13 +17,31 @@ export default function SellPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [eventData, setEventData] = useState<EventType | null>(null);
+    const [loading, setLoading] = useState(true);
     const [price, setPrice] = useState<number>(0);
+    const [sales,setSales] = useState([])
 
     useEffect(() => {
-        const foundEvent = events.find((event) => event.id === Number(id));
-        if (foundEvent) {
-            setEvent(foundEvent);
-            setEventData(foundEvent);
+        if (id) {
+            const fetchEvent = async () => {
+                try {
+                    const response = await getEventById(id);
+                    const historic = await getSales(id);
+                    if (response.success) {
+                        setEventData(response.data.event); 
+                    } else {
+                        console.error('Error fetching event:', response.error);
+                    }
+                    if(historic.success){
+                        setSales(historic.data.message)
+                    }
+                } catch (error) {
+                    console.error("Error fetching events", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchEvent();
         }
     }, [id]);
 
@@ -31,20 +49,14 @@ export default function SellPage() {
         return <div>Loading or Event not found...</div>;
     }
 
-    // const handleSell = () => {
-    //     // Aquí en el futuro deberías hacer una petición al backend para listar el ticket
-    //     console.log("Selling ticket at price:", price);
-    //     navigate('/tickets'); // Vuelve a tus tickets luego de venderlo
-    // };
-
     const { eventName, eventDate, location, type } = eventData;
 
     const data = {
-        labels: ['12:00', '13:00', '14:00', '15:00', '16:00'], // Las etiquetas en el eje X (tiempo)
+        labels: sales.map((sale:any) => new Date(sale?.timestamp).toLocaleString()),
         datasets: [
             {
                 label: 'Sell on',
-                data: [120, 180, 150, 200, 190],
+                data: sales.map((sale:any) => (sale?.price * 0.00001971).toFixed(2)),
                 fill: false,
                 borderColor: '',
                 tension: 0.3,
@@ -73,27 +85,20 @@ export default function SellPage() {
             },
             y: {
                 title: {
-                    display: false,
+                    text:"USD $",
+                    display: true,
                 },
             },
-        },
-        legend: {
-            display: false,
-        },
-        title: {
-            display: false,
         }
     };
 
     return (
         <Styled.Page>
             <Styled.Wrapper>
-                <Styled.ButtonSmall onClick={() => navigate(-1)}>
-                    Back
-                </Styled.ButtonSmall>
                 <Styled.Title>Sell your Ticket</Styled.Title>
                 <Styled.EventPhoto src="https://picsum.photos/300" alt="Event" />
                 <Styled.FrameVerticalMain>
+
                     <Styled.FrameHorizontal>
                         <Styled.FrameVertical>
                             <Styled.TextHint>{eventDate}</Styled.TextHint>
